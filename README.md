@@ -11,3 +11,19 @@ This project uses the following libraries and its dependencies:
 * [mysql](https://www.npmjs.com/package/mysql)
 * [nodemon](https://www.npmjs.com/package/nodemon)
 * [dotenv](https://www.npmjs.com/package/dotenv)
+
+## Database
+
+This service performs the CRUD operations on MySQL database with the following DDL:
+
+```
+CREATE TABLE `person` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+```
