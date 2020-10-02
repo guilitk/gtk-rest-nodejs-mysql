@@ -1,5 +1,5 @@
 {
-  "name": "jagu-app-mysql-nodejs-backend",
+  "name": "gtk-rest-nodejs-mysql",
   "version": "1.0.0",
   "dependencies": {
     "cors": "^2.8.5",
