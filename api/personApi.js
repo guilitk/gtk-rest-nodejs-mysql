@@ -11,31 +11,44 @@ const { Router } = require("express");
 const personRouter = new Router();
 
 personRouter.get('/',
-    async ({res, next}) => {
+    async ({res}) => {
         try {
             const result = await personRepository.getAllPersons();
             res.status(200).json(result);
         } catch (error) {
-            next(error);
+            res.status(500).json({
+                message:"Unknown error"
+            });
         }
     });
 
 personRouter.get("/:id",
-    async ({req, res, next}) => {
+    async ({params, res}) => {
         try {
-            const result = await personRepository.getPersonById(req.params.id);
+            const result = await personRepository.getPersonById(params.id);
             res.status(200).json(result);
         } catch (error) {
-            next(error);
+            switch (error.status) {
+                case 404:
+                    res.status(404).json({
+                        message: "Person was not found"
+                    });
+                    break;
+            
+                default:
+                    res.status(500).json({
+                        message: "Unknown error"
+                    });
+                    break;
+            }
         }
     });
 
 personRouter.post("/",
-    async ({req, res, next}) => {
+    async ({body, protocol, headers, originalUrl, res, next}) => {
         try {
-            const result = await personRepository.createPerson(req.body);
-            const endpoint = `${req.headers.host}${req.originalUrl}${result[0].id}`;
-            result.push(endpoint);
+            const result = await personRepository.createPerson(body);
+            result.endpoint = `${protocol}://${headers.host}${originalUrl}${result.person.id}`;
             res.status(201).json(result);
         } catch (error) {
             next(error);
@@ -43,9 +56,9 @@ personRouter.post("/",
     });
 
 personRouter.delete("/:id",
-    async ({req, res, next}) => {
+    async ({params, res, next}) => {
         try {
-            await personRepository.deletePerson(req.params.id);
+            await personRepository.deletePerson(params.id);
             res.status(204).send();
         } catch (error) {
             next(error);
@@ -53,9 +66,9 @@ personRouter.delete("/:id",
     });
 
 personRouter.put("/:id",
-    async ({req, res, next}) => {
+    async ({params, body, res, next}) => {
         try {
-            await personRepository.updatePerson(req.body, req.params.id);
+            await personRepository.updatePerson(body, params.id);
             res.status(204).send();
         } catch (error) {
             next(error);

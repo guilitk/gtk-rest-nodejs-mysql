@@ -68,23 +68,42 @@ class Person {
         }
     }
 
-    static sanitizePersons(data) {
-        let persons = []
-        data.forEach(person => {
-            let newDate = null;
-            if (person.date_of_birth !== null) {
-                newDate = person.date_of_birth.slice(0, 10);
-            }
+    static sanitizeDateOfBirth(date) {
+        if (date !== null) {
+            date = date.slice(0, 10);
+        }
 
-            persons.push({
+        return date;
+    }
+
+    static sanitizePersons(data) {
+        let result = {
+            persons: []
+        };
+
+        data.forEach(person => {
+            result.persons.push({
                 id: person.id,
                 name: person.name,
                 email: person.email,
-                dateOfBirth: newDate
+                dateOfBirth: this.sanitizeDateOfBirth(person.date_of_birth)
             });
         });
 
-        return persons;
+        return result;
+    }
+
+    static sanitizePerson(data) {
+        const result = {
+            person: {
+                id: data[0].id,
+                name: data[0].name,
+                email: data[0].email,
+                dateOfBirth: this.sanitizeDateOfBirth(data[0].date_of_birth)
+            }
+        }
+
+        return result;
     }
 }
 

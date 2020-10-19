@@ -35,15 +35,20 @@ function executeQuery(query, values) {
 async function getAllPersons() {
     const query = "SELECT * FROM person";
     const result = await executeQuery(query);
-    
+
     return Person.sanitizePersons(JSON.parse(result));
 }
 
 async function getPersonById(id) {
     const query = "SELECT * FROM person WHERE id = ?";
-    const result = await executeQuery(query, id);
+    let result = await executeQuery(query, id);
+    result = JSON.parse(result);
 
-    return Person.sanitizePersons(JSON.parse(result));
+    if (result.length === 0) {
+        throw {status : 404};
+    }
+
+    return Person.sanitizePerson(result);
 }
 
 async function createPerson(data) {
@@ -62,7 +67,7 @@ async function deletePerson(id) {
 
     if (result.affectedRows < 1) {
         throw new Error(`Person with id ${id} was not deleted`);
-    }else{
+    } else {
         return result;
     }
 }

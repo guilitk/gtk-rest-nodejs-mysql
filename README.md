@@ -11,6 +11,7 @@ This project uses the following libraries and its dependencies:
 * [mysql](https://www.npmjs.com/package/mysql)
 * [nodemon](https://www.npmjs.com/package/nodemon)
 * [dotenv](https://www.npmjs.com/package/dotenv)
+* [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
 
 ## Database
 
